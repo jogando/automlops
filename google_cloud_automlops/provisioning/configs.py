@@ -94,6 +94,7 @@ class TerraformConfig(BaseModel):
     schedule_pattern: str
     source_repo_branch: str
     source_repo_name: str
+    source_repo_reuse_existing: bool
     source_repo_type: str
     storage_bucket_location: str
     storage_bucket_name: str

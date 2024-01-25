@@ -94,6 +94,7 @@ def build(
         naming_prefix=config.naming_prefix,
         pipeline_job_submission_service_type=config.pipeline_job_submission_service_type,
         schedule_pattern=config.schedule_pattern,
+        source_repo_reuse_existing=config.source_repo_reuse_existing,
         source_repo_type=config.source_repo_type,
         use_ci=config.use_ci,
         vpc_connector=config.vpc_connector), 'w')
@@ -206,6 +207,7 @@ def create_environment_main_tf_jinja(
     naming_prefix: str,
     pipeline_job_submission_service_type: str,
     schedule_pattern: str,
+    source_repo_reuse_existing:bool,
     source_repo_type: str,
     use_ci: bool,
     vpc_connector: str) -> str:
@@ -236,6 +238,7 @@ def create_environment_main_tf_jinja(
             naming_prefix=naming_prefix,
             pipeline_job_submission_service_type=pipeline_job_submission_service_type,
             schedule_pattern=schedule_pattern,
+            source_repo_reuse_existing=source_repo_reuse_existing,
             source_repo_type=source_repo_type,
             use_ci=use_ci,
             vpc_connector=vpc_connector)

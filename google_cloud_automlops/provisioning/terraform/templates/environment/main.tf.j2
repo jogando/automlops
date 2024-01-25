@@ -37,13 +37,21 @@ resource "google_storage_bucket" "storage_bucket" {
 }
 {% if use_ci %}
 {% if source_repo_type == 'cloud-source-repositories' %}
+{% if not source_repo_reuse_existing %}
 # Create cloud source repository
 resource "google_sourcerepo_repository" "source_repo" {
   project                 = var.project_id
   name                    = var.source_repo_name
 
   depends_on              = [module.google_project_service,time_sleep.wait_60_seconds]
-}{% endif %}
+}
+{% else %}
+data "google_sourcerepo_repository" "source_repo" {
+  project                 = var.project_id
+  name                    = var.source_repo_name
+}
+{% endif %}
+{% endif %}
 {% if pipeline_job_submission_service_type == 'cloud-run' %}
 # Build and Push Submission Service image
 resource "null_resource" "build_and_push_submission_service" {
@@ -142,7 +150,7 @@ resource "google_cloudbuild_trigger" "cloudbuild_trigger" {
   }
   filename                = "cloudbuild.yaml"
 
-  depends_on              = [google_sourcerepo_repository.source_repo]
+  depends_on              = [{% if source_repo_reuse_existing %}data.{% endif %}google_sourcerepo_repository.source_repo]
 }{% endif %}
 {% if schedule_pattern != 'No Schedule Specified' %}
 # Create Cloud Scheduler Job
